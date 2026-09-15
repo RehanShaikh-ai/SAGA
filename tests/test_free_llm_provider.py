@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 from unittest.mock import MagicMock
 
-from saga.providers.provider_router import FreeLLMProvider
+from saga.providers import FreeLLMProvider
 
 
 def test_generate_returns_message_content():
