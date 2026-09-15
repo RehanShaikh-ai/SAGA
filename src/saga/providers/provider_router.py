@@ -85,7 +85,7 @@ class FreeLLMProvider:
 
             for chunk in stream:
 
-                if not chunk.choices:
+                if chunk is None or not chunk.choices:
                     continue
 
                 content: str | None = chunk.choices[0].delta.content

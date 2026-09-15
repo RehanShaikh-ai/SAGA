@@ -32,11 +32,19 @@ def test_stream_yields_only_non_empty_content():
     provider.client = client
     client.chat.completions.create.return_value = [
         SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content="Hel"))]),
+        SimpleNamespace(choices=[]),
+        None,
+        SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content=""))]),
         SimpleNamespace(choices=[SimpleNamespace(delta=SimpleNamespace(content="lo"))]),
     ]
 
     result = list(provider.stream([{"role": "user", "content": "Say hello"}]))
 
     assert result == ["Hel", "lo"]
-    client.chat.completions.create.assert_called_once()
+    client.chat.completions.create.assert_called_once_with(
+        model="bazaarlink-auto",
+        messages=[{"role": "user", "content": "Say hello"}],
+        temperature=0.5,
+        stream=True,
+    )
     
